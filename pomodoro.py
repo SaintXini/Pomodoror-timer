@@ -4,9 +4,9 @@ from ttkbootstrap import Style
 
 
 # establecer el tiempo predeterminado para los intervalos de trabajo y descanso
-WORK_INTERVAL = 25 * 60  # 25 minutos
-SHORT_BREAK_INTERVAL = 5 * 60   # 5 minutos
-LONG_BREAK_INTERVAL = 15 * 60   # 15 minutos
+WORK_TIME = 25 * 60  # 25 minutos
+SHORT_BREAK_TIME = 5 * 60   # 5 minutos
+LONG_BREAK_TIME = 15 * 60   # 15 minutos
 
 
 class PomodoroTimer:
@@ -27,7 +27,37 @@ class PomodoroTimer:
         
         self.stop_button.pack(pady=5)
 
-        self.work_time, self.break_time = WORK_INTERVAL, SHORT_BREAK_INTERVAL
-        self.is_work_time, self.pomodoros_completed, self.is_running = False, 0, False
+        self.work_time, self.break_time = WORK_TIME, SHORT_BREAK_TIME
+        self.is_work_time, self.pomodoros_completed, self.is_running = True, 0, False
 
         self.root.mainloop()
+
+    def start_timer(self):
+        self.start_button.config(state=tk.DISABLED)
+        self.stop_button.config(state=tk.NORMAL)
+        self.is_running = True
+        self.update_timer()
+    
+    def stop_timer(self):
+        self.start_button.config(state=tk.NORMAL)
+        self.stop_button.config(state=tk.DISABLED)
+        self.is_running = False
+
+    def update_timer(self):
+        if self.is_running:
+            if self.is_work_time:
+                self.work_time -= 1
+                if self.work_time == 0:
+                    self.is_work_time = False
+                    self.pomodoros_completed += 1
+                    self.break_time = LONG_BREAK_TIME if self.pomodoros_completed % 4 == 0 else SHORT_BREAK_TIME
+                    messagebox.showinfo("Great Job!" if self.pomodoros_completed % 4 == 0 else "Time for a Break!", f"You've completed {self.pomodoros_completed} pomodoros!")
+                    if self.pomodoros_completed % 4 == 0:
+                        messagebox.showinfo("Great Job!", "You've completed 4 pomodoros! Take a long break!")
+                    else:
+                        messagebox.showinfo("Time for a Break!", "Take a short break! and stretch your legs!")
+            else:
+                self.break_time -= 1
+                if self.break_time == 0:
+                    self.is_work_time, self.work_time = True, WORK_TIME
+                    messagebox.showinfo("Break Over!", "Time to get back to work!")
