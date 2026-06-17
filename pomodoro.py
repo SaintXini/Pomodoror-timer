@@ -47,22 +47,42 @@ class PomodoroTimer:
         if self.is_running:
             if self.is_work_time:
                 self.work_time -= 1
+
                 if self.work_time == 0:
                     self.is_work_time = False
                     self.pomodoros_completed += 1
                     self.break_time = LONG_BREAK_TIME if self.pomodoros_completed % 4 == 0 else SHORT_BREAK_TIME
-                    messagebox.showinfo("Great Job!" if self.pomodoros_completed % 4 == 0 else "Time for a Break!", f"You've completed {self.pomodoros_completed} pomodoros!")
+
                     if self.pomodoros_completed % 4 == 0:
-                        messagebox.showinfo("Great Job!", "You've completed 4 pomodoros! Take a long break!")
+                        messagebox.showinfo(
+                            "Great Job!",
+                            "You've completed 4 pomodoros! Take a long break!"
+                        )
                     else:
-                        messagebox.showinfo("Time for a Break!", "Take a short break! and stretch your legs!")
+                        messagebox.showinfo(
+                            "Time for a Break!",
+                            "Take a short break and stretch your legs!"
+                        )
+
             else:
                 self.break_time -= 1
+
                 if self.break_time == 0:
-                    self.is_work_time, self.work_time = True, WORK_TIME
-                    messagebox.showinfo("Break Over!", "Time to get back to work!")
-                    minutes, seconds = divmod(self.work_time if self.is_work_time else self.break_time, 60)
-                    self.timer_label.config(text="{:02d}:{:02d}".format(minutes, seconds))
-                    self.root.after(1000, self.update_timer)
+                    self.is_work_time = True
+                    self.work_time = WORK_TIME
+                    messagebox.showinfo(
+                        "Break Over!",
+                        "Time to get back to work!"
+                    )
+
+            # Actualizar temporizador SIEMPRE
+            current_time = self.work_time if self.is_work_time else self.break_time
+            minutes, seconds = divmod(current_time, 60)
+
+            self.timer_label.config(
+                text=f"{minutes:02d}:{seconds:02d}"
+            )
+
+            self.root.after(1000, self.update_timer)
 
 PomodoroTimer()
