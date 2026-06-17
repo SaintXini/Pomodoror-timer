@@ -22,3 +22,12 @@ class PomodoroTimer:
 
         self.start_button = tk.Button(self.root, text="Start", command=self.start_timer)
         self.start_button.pack(pady=5)
+
+        self.stop_button = tk.Button(self.root, text="Stop", command=self.stop_timer, state=tk.DISABLED)
+        
+        self.stop_button.pack(pady=5)
+
+        self.work_time, self.break_time = WORK_INTERVAL, SHORT_BREAK_INTERVAL
+        self.is_work_time, self.pomodoros_completed, self.is_running = False, 0, False
+
+        self.root.mainloop()
