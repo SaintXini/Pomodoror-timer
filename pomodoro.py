@@ -16,3 +16,9 @@ class PomodoroTimer:
         self.root.title("Pomodoro Timer")
         self.style = Style(theme="simplex")
         self.style.theme_use()
+
+        self.timer_label = tk.Label(self.root, text="", font=("TkDefaultFont", 40))
+        self.timer_label.pack(pady=20)
+
+        self.start_button = tk.Button(self.root, text="Start", command=self.start_timer)
+        self.start_button.pack(pady=5)
