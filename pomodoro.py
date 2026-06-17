@@ -11,7 +11,7 @@ LONG_BREAK_TIME = 15 * 60   # 15 minutos
 
 class PomodoroTimer:
     def __init__(self):
-        self.root = tk.tk()
+        self.root = tk.Tk()
         self.root.geometry("200x200")
         self.root.title("Pomodoro Timer")
         self.style = Style(theme="simplex")
@@ -61,3 +61,8 @@ class PomodoroTimer:
                 if self.break_time == 0:
                     self.is_work_time, self.work_time = True, WORK_TIME
                     messagebox.showinfo("Break Over!", "Time to get back to work!")
+                    minutes, seconds = divmod(self.work_time if self.is_work_time else self.break_time, 60)
+                    self.timer_label.config(text="{:02d}:{:02d}".format(minutes, seconds))
+                    self.root.after(1000, self.update_timer)
+
+PomodoroTimer()
